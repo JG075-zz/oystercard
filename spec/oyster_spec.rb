@@ -23,4 +23,18 @@ describe Oyster do
     end
   end
 
+  describe "#deduct" do
+    context "when paying for a journey" do
+      it "deducts money" do
+        before = subject.top_up(30)
+        expect(subject.deduct(10)).to eq before - 10
+      end
+    end
+    
+    context "when deducting below 0" do
+      it "raises an error" do
+        expect{subject.deduct(1)}.to raise_error "Cannot enter minus zones"
+      end
+    end
+  end
 end
