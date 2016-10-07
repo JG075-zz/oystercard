@@ -1,6 +1,9 @@
 class Journeys
   attr_reader :counter, :completed_journeys, :entry_station, :exit_station
 
+  PENALTY_FARE = 6
+  MINIMUM_FARE = 1
+
   def initialize
     @counter = 0
     @completed_journeys = {}
@@ -21,12 +24,14 @@ class Journeys
     @exit_station = station
   end
 
+  def clear_journey
+    @entry_station, @exit_station = nil
+  end
+
   def fare
-    if @entry_station.zone > @exit_station.zone
-      @entry_station.zone - @exit_station.zone
-    else
-      @exit_station.zone - @entry_station.zone
-    end
+    #@entry_station.zone - @exit_station.zone
+    return PENALTY_FARE if @entry_station == nil || @exit_station == nil
+    MINIMUM_FARE
   end
 
   def in_journey?

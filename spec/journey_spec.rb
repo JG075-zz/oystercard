@@ -27,26 +27,51 @@ describe Journeys do
     end
   end
 
+  # describe "#fare" do
+  #   context "when called when the first zone is higher" do
+  #     it "returns the fare amount" do
+  #       card.top_up(10)
+  #       allow(entry_station).to receive(:zone).and_return 6
+  #       allow(exit_station).to receive(:zone).and_return 2
+  #       card.touch_in(entry_station)
+  #       card.touch_out(exit_station)
+  #       expect(card.journey.fare).to eq 4
+  #   end
+  # end
+  #
+  #   context "when called when the second zone is higher" do
+  #     it "returns the fare amount" do
+  #       card.top_up(10)
+  #       allow(entry_station).to receive(:zone).and_return 2
+  #       allow(exit_station).to receive(:zone).and_return 6
+  #       card.touch_in(entry_station)
+  #       card.touch_out(exit_station)
+  #       expect(card.journey.fare).to eq 4
+  #     end
+  #   end
+  # end
+
   describe "#fare" do
-    context "when called when the first zone is higher" do
-      it "returns the fare amount" do
-        card.top_up(10)
-        allow(entry_station).to receive(:zone).and_return 6
-        allow(exit_station).to receive(:zone).and_return 2
-        card.touch_in(entry_station)
-        card.touch_out(exit_station)
-        expect(card.journey.fare).to eq 4
+    context "when touch out without touch in" do
+      it "charges penalty fare" do
+        journey.leave_station(exit_station)
+        expect(journey.fare).to eq Journeys::PENALTY_FARE
+      end
+    end
+
+    context "when touch in without touch out" do
+      it "charges penalty fare" do
+        journey.enter_station(entry_station)
+        expect(journey.fare).to eq Journeys::PENALTY_FARE
+      end
+    end
+
+    context "when touch in and touch out" do
+      it "charges minimum fare" do
+        journey.enter_station(entry_station)
+        journey.leave_station(exit_station)
+        expect(journey.fare).to eq Journeys::MINIMUM_FARE
+      end
     end
   end
-  context "when called when the second zone is higher" do
-    it "returns the fare amount" do
-      card.top_up(10)
-      allow(entry_station).to receive(:zone).and_return 2
-      allow(exit_station).to receive(:zone).and_return 6
-      card.touch_in(entry_station)
-      card.touch_out(exit_station)
-      expect(card.journey.fare).to eq 4
-  end
-end
-end
 end

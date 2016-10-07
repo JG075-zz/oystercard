@@ -24,25 +24,18 @@ describe OysterCard do
   end
 
   describe "#touch_in" do
-    # context "when card touches in" do
-    #   it "sets in_journey to true" do
-    #     card_topped_up.touch_in(entry_station)
-    #     expect(card_topped_up.in_journey?).to be true
-    #   end
-    # end
-
     context "when balance is less than fare" do
       it "raises an error" do
         expect{card.touch_in(entry_station)}.to raise_error "do not have enough money"
       end
     end
 
-    context 'when already touched in' do
-      it "raises an error" do
-        card_topped_up.touch_in(entry_station)
-        expect{ card_topped_up.touch_in(entry_station) }.to raise_error "need to touch out first"
-      end
-    end
+    # context 'when already touched in' do
+    #   it "raises an error" do
+    #     card_topped_up.touch_in(entry_station)
+    #     expect{ card_topped_up.touch_in(entry_station) }.to raise_error "need to touch out first"
+    #   end
+    # end
 
     context "check entry station is saved" do
       it "station is saved" do
@@ -59,19 +52,15 @@ describe OysterCard do
         card_topped_up.touch_out(exit_station)
       end
 
-      it "exit station is not nil" do
-        expect(card_topped_up.journey.exit_station).not_to be nil
-      end
-
       it "saves the exit station" do
-        expect(card_topped_up.journey.exit_station).to be exit_station
+        expect(card_topped_up.journey.completed_journeys["Journey 1"][1]).to be exit_station
       end
     end
 
       context 'when already touched out' do
-        it "raises an error" do
-          expect{ card.touch_out(exit_station) }.to raise_error "need to touch in first"
-        end
+        # it "raises an error" do
+        #   expect{ card.touch_out(exit_station) }.to raise_error "need to touch in first"
+        # end
 
 
       it "deducts the minimum fare from the balance" do

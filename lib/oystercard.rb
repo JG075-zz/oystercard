@@ -1,3 +1,6 @@
+require_relative "journeys"
+require_relative "station"
+
 class OysterCard
   MAX_LIMIT = 90
   BALANCE = 0
@@ -18,15 +21,19 @@ attr_reader :balance, :max_limit, :journey
 
   def touch_in(station)
     raise "do not have enough money" if @balance < MIN_FARE
-    raise "need to touch out first" if @journey.entry_station != nil
+    if @journey.entry_station != nil
+      deduct(@journey.fare)
+      @journey.save_journeys
+      @journey.clear_journey
+    end
     @journey.enter_station(station)
   end
 
   def touch_out(station)
-    raise "need to touch in first" if @journey.entry_station == nil
     @journey.leave_station(station)
     @journey.save_journeys
-    deduct(MIN_FARE)
+    deduct(@journey.fare)
+    @journey.clear_journey
   end
 
   private
