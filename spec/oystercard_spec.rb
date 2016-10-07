@@ -30,13 +30,6 @@ describe OysterCard do
       end
     end
 
-    # context 'when already touched in' do
-    #   it "raises an error" do
-    #     card_topped_up.touch_in(entry_station)
-    #     expect{ card_topped_up.touch_in(entry_station) }.to raise_error "need to touch out first"
-    #   end
-    # end
-
     context "check entry station is saved" do
       it "station is saved" do
         card_topped_up.touch_in(entry_station)
@@ -53,12 +46,7 @@ describe OysterCard do
       end
     end
 
-      context 'when already touched out' do
-        # it "raises an error" do
-        #   expect{ card.touch_out(exit_station) }.to raise_error "need to touch in first"
-        # end
-
-
+    context 'when already touched out' do
       it "deducts the minimum fare from the balance" do
         card_topped_up.touch_in(entry_station)
         expect {card_topped_up.touch_out(exit_station)}.to change{card_topped_up.balance}.by(-(OysterCard::MIN_FARE))
