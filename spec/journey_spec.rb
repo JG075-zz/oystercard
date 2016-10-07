@@ -7,39 +7,28 @@ describe Journeys do
   let(:exit_station) { double :station}
   let(:card) { OysterCard.new }
 
-  # describe "#saved-journeys" do
-  #   context "when called" do
-  #     it 'saves both stations to the completed_journeys hash' do
-  #           card.top_up(10)
-  #           card.touch_in(entry_station)
-  #           card.touch_out(exit_station)
-  #           expect(card.journey.completed_journeys["Journey #{card.journey.counter}"]).to eq [entry_station, exit_station]
-  #         end
-  #       end
-  #     end
-  #
-  # describe "#in_journey"do
-  #   context "when called" do
-  #     it 'checks that card is in journey' do
-  #       journey.enter_station(entry_station)
-  #       expect(journey.in_journey?).to be true
-  #     end
-  #   end
-  # end
+  describe "#in_journey"do
+    context "when called" do
+      it 'checks that card is in journey' do
+        journey.entry_station = entry_station
+        expect(journey.in_journey?).to be true
+      end
+    end
+  end
 
   describe "#fare" do
     context "charge according to zone difference" do
       it "returns the minimum fare if same zone" do
-        card.top_up(10)
-        allow(entry_station).to receive(:zone).and_return 6
-        allow(exit_station).to receive(:zone).and_return 2
-        card.touch_in(entry_station)
-        card.touch_out(exit_station)
-        expect(card.journey_log.journey.fare).to eq 4
+        journey.entry_station = Station.new("waterloo", 1)
+        journey.exit_station = Station.new("liverpool", 1)
+        expect(journey.fare).to eq 1
+      end
+      it "returns minimum fare plus zone difference" do
+        journey.entry_station = Station.new("waterloo", 5)
+        journey.exit_station = Station.new("liverpool", 1)
+        expect(journey.fare).to eq 5
+      end
     end
-  end
-
-
   end
 
   describe "#fare" do
@@ -54,14 +43,6 @@ describe Journeys do
       it "charges penalty fare" do
         journey.entry_station = entry_station
         expect(journey.fare).to eq Journeys::PENALTY_FARE
-      end
-    end
-
-    context "when touch in and touch out" do
-      it "charges minimum fare" do
-        journey.entry_station = entry_station
-        journey.exit_station = exit_station
-        expect(journey.fare).to eq Journeys::MINIMUM_FARE
       end
     end
   end

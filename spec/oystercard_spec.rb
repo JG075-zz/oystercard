@@ -48,6 +48,8 @@ describe OysterCard do
 
     context 'when already touched out' do
       it "deducts the minimum fare from the balance" do
+        entry_station = Station.new("waterloo", 1)
+        exit_station = Station.new("liverpool", 1)
         card_topped_up.touch_in(entry_station)
         expect {card_topped_up.touch_out(exit_station)}.to change{card_topped_up.balance}.by(-(OysterCard::MIN_FARE))
       end

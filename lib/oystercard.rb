@@ -22,20 +22,22 @@ class OysterCard
 
   def touch_in(station)
     raise "do not have enough money" if @balance < MIN_FARE
-    if @journey_log.journey.entry_station != nil
-      deduct(@journey_log.journey.fare)
-    end
+    deduct(@journey_log.journey.fare) if @journey_log.journey.entry_station != nil
     @journey_log.start(station)
   end
 
   def touch_out(station)
     @journey_log.finish(station)
     deduct(@journey_log.journey.fare)
-    @journey_log.save_journeys
-    @journey_log.clear_journey
+    journey_reset
   end
 
   private
+
+  def journey_reset
+    @journey_log.save_journeys
+    @journey_log.clear_journey
+  end
 
   def deduct(value)
     raise "can't deduct less than balance" if @balance < value
