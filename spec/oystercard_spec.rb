@@ -40,7 +40,7 @@ describe OysterCard do
     context "check entry station is saved" do
       it "station is saved" do
         card_topped_up.touch_in(entry_station)
-        expect(card_topped_up.journey.entry_station).not_to be nil
+        expect(card_topped_up.journey_log.journey.entry_station).not_to be nil
       end
     end
   end
@@ -50,10 +50,6 @@ describe OysterCard do
       before :each do
         card_topped_up.touch_in(entry_station)
         card_topped_up.touch_out(exit_station)
-      end
-
-      it "saves the exit station" do
-        expect(card_topped_up.journey.completed_journeys["Journey 1"][1]).to be exit_station
       end
     end
 
@@ -73,7 +69,7 @@ describe OysterCard do
   describe "#in_journey?" do
     context "when card is initialized" do
       it "it is not in journey" do
-        expect(card.journey.in_journey?).to be false
+        expect(card.journey_log.journey.in_journey?).to be false
       end
     end
   end
