@@ -27,29 +27,20 @@ describe Journeys do
   #   end
   # end
 
-  # describe "#fare" do
-  #   context "when called when the first zone is higher" do
-  #     it "returns the fare amount" do
-  #       card.top_up(10)
-  #       allow(entry_station).to receive(:zone).and_return 6
-  #       allow(exit_station).to receive(:zone).and_return 2
-  #       card.touch_in(entry_station)
-  #       card.touch_out(exit_station)
-  #       expect(card.journey.fare).to eq 4
-  #   end
-  # end
-  #
-  #   context "when called when the second zone is higher" do
-  #     it "returns the fare amount" do
-  #       card.top_up(10)
-  #       allow(entry_station).to receive(:zone).and_return 2
-  #       allow(exit_station).to receive(:zone).and_return 6
-  #       card.touch_in(entry_station)
-  #       card.touch_out(exit_station)
-  #       expect(card.journey.fare).to eq 4
-  #     end
-  #   end
-  # end
+  describe "#fare" do
+    context "charge according to zone difference" do
+      it "returns the minimum fare if same zone" do
+        card.top_up(10)
+        allow(entry_station).to receive(:zone).and_return 6
+        allow(exit_station).to receive(:zone).and_return 2
+        card.touch_in(entry_station)
+        card.touch_out(exit_station)
+        expect(card.journey_log.journey.fare).to eq 4
+    end
+  end
+
+
+  end
 
   describe "#fare" do
     context "when touch out without touch in" do

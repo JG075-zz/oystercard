@@ -11,7 +11,8 @@ class Journeys
 
   def fare
     return PENALTY_FARE if @entry_station == nil || @exit_station == nil
-    MINIMUM_FARE
+    zone_difference = @entry_station.zone - @exit_station.zone
+    MINIMUM_FARE + zone_difference.abs
   end
 
   def in_journey?
